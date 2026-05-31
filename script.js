@@ -650,7 +650,8 @@ class Plant {
         }
     });
 }
-    function drawLeaf(
+}
+function drawLeaf(
     x,
     y,
     angle,
