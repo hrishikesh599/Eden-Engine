@@ -521,3 +521,6 @@ button:active{
     width:240px;
   }
 }
+#loadingScreen{
+  transition: opacity 0.8s ease;
+}
