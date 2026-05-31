@@ -133,6 +133,9 @@ function getSeasonSky(){
 }
 function drawBackground(){
 
+    const cycle =
+        (Math.sin(worldTime)+1)/2;
+
     const colors =
         getSeasonSky();
 
@@ -154,8 +157,7 @@ function drawBackground(){
         colors[1]
     );
 
-    ctx.fillStyle =
-        gradient;
+    ctx.fillStyle = gradient;
 
     ctx.fillRect(
         0,
@@ -164,15 +166,155 @@ function drawBackground(){
         canvas.height
     );
 
+    // Night overlay
+
+    ctx.fillStyle =
+        `rgba(
+            0,
+            0,
+            30,
+            ${1-cycle}
+        )`;
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    // Stars
+
+    if(cycle < 0.4){
+
+        ctx.fillStyle =
+            `rgba(
+                255,
+                255,
+                255,
+                ${(0.4-cycle)*2}
+            )`;
+
+        for(
+            let i=0;
+            i<150;
+            i++
+        ){
+
+            const x =
+                (i*73) %
+                canvas.width;
+
+            const y =
+                (i*97) %
+                (canvas.height*0.7);
+
+            ctx.beginPath();
+
+            ctx.arc(
+                x,
+                y,
+                1,
+                0,
+                Math.PI*2
+            );
+
+            ctx.fill();
+        }
+    }
+
+    // Ground
+
     ctx.fillStyle =
         "#1f4f1f";
 
     ctx.fillRect(
         0,
-        canvas.height - 80,
+        canvas.height-80,
         canvas.width,
         80
     );
+}
+function drawSunMoon(){
+
+    const centerX =
+        canvas.width/2;
+
+    const centerY =
+        canvas.height*0.9;
+
+    const radiusX =
+        canvas.width*0.45;
+
+    const radiusY =
+        canvas.height*0.45;
+
+    const sunX =
+        centerX +
+        Math.cos(
+            worldTime-Math.PI
+        )*radiusX;
+
+    const sunY =
+        centerY +
+        Math.sin(
+            worldTime-Math.PI
+        )*radiusY;
+
+    const moonX =
+        centerX +
+        Math.cos(
+            worldTime
+        )*radiusX;
+
+    const moonY =
+        centerY +
+        Math.sin(
+            worldTime
+        )*radiusY;
+
+    // Sun
+
+    ctx.beginPath();
+
+    ctx.arc(
+        sunX,
+        sunY,
+        40,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fillStyle =
+        "#FFD966";
+
+    ctx.shadowBlur = 60;
+    ctx.shadowColor = "#FFD966";
+
+    ctx.fill();
+
+    // Moon
+
+    ctx.beginPath();
+
+    ctx.arc(
+        moonX,
+        moonY,
+        28,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fillStyle =
+        "#E8F0FF";
+
+    ctx.shadowBlur = 30;
+    ctx.shadowColor =
+        "#E8F0FF";
+
+    ctx.fill();
+
+    ctx.shadowBlur = 0;
 }
 function animate(){
 
@@ -189,6 +331,7 @@ function animate(){
     updateWeather();
 
     drawBackground();
+    drawSunMoon();
 }
 
 animate();
