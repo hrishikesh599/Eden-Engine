@@ -637,8 +637,6 @@ class Plant {
 
         if(i > 2){
 
-          if(i > 2){
-
     const side =
         i % 2 === 0 ? 1 : -1;
 
