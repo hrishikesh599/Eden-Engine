@@ -637,17 +637,33 @@ class Plant {
 
         if(i > 2){
 
-            drawLeaf(
+          if(i > 2){
 
-                seg.endX,
-                seg.endY,
+    const side =
+        i % 2 === 0 ? 1 : -1;
 
-                seg.renderAngle,
+    const offset = 10;
 
-                8 + Math.sin(i)*2
+    drawLeaf(
 
-            );
-        }
+        seg.endX +
+        Math.cos(
+            seg.renderAngle +
+            side * Math.PI/2
+        ) * offset,
+
+        seg.endY +
+        Math.sin(
+            seg.renderAngle +
+            side * Math.PI/2
+        ) * offset,
+
+        seg.renderAngle +
+        side * 0.5,
+
+        14
+    );
+}
     });
 }
 }
