@@ -256,10 +256,10 @@ function drawSunMoon(){
         )*radiusX;
 
     const sunY =
-        centerY +
-        Math.sin(
-            worldTime-Math.PI
-        )*radiusY;
+    centerY -
+    Math.abs(
+        Math.sin(worldTime)
+    ) * radiusY;
 
     const moonX =
         centerX +
@@ -268,10 +268,10 @@ function drawSunMoon(){
         )*radiusX;
 
     const moonY =
-        centerY +
-        Math.sin(
-            worldTime
-        )*radiusY;
+    centerY -
+    Math.abs(
+        Math.sin(worldTime + Math.PI)
+    ) * radiusY;
 
     // Sun
 
