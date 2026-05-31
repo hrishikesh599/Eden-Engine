@@ -192,3 +192,15 @@ function animate(){
 }
 
 animate();
+window.addEventListener("load", () => {
+  const loading = document.getElementById("loadingScreen");
+
+  setTimeout(() => {
+    loading.style.opacity = "0";
+
+    setTimeout(() => {
+      loading.style.display = "none";
+    }, 800);
+
+  }, 1000);
+});
