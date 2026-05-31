@@ -398,6 +398,47 @@ for(let i = 0; i < 40; i++){
     );
 }
 animate()
+// =========================
+// PHASE 9 - SEEDS
+// =========================
+
+class Seed {
+
+    constructor(x, y){
+
+        this.x = x;
+        this.y = y;
+
+        this.age = 0;
+        this.germinated = false;
+    }
+
+    update(){
+
+        this.age += 0.001 * timeScale;
+
+        if(this.age > 1){
+            this.germinated = true;
+        }
+    }
+
+    draw(){
+
+        ctx.fillStyle = "#4a2d17";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            this.x,
+            this.y,
+            4,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+    }
+}
 function animate(){
 
     requestAnimationFrame(
@@ -413,6 +454,13 @@ function animate(){
     updateWeather();
 
     drawBackground();
+
+seeds.forEach(seed => {
+
+    seed.update();
+    seed.draw();
+
+});
     drawSunMoon();
     const cycle =
     (Math.sin(worldTime)+1)/2;
@@ -429,6 +477,21 @@ if(cycle < 0.45){
 }
 
 animate();
+canvas.addEventListener("click", e => {
+
+    if(
+        e.clientY >
+        canvas.height - 120
+    ){
+
+        seeds.push(
+            new Seed(
+                e.clientX,
+                e.clientY
+            )
+        );
+    }
+});
 window.addEventListener("load", () => {
   const loading = document.getElementById("loadingScreen");
 
