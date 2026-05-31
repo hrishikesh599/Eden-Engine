@@ -627,7 +627,414 @@ window.addEventListener(
         },1000);
     }
 );
+// ======================================
+// PART 2
+// WEATHER SYSTEMS
+// ======================================
 
+// ----------------------
+// RAIN
+// ----------------------
+
+class RainParticle {
+
+    constructor(){
+
+        this.reset();
+    }
+
+    reset(){
+
+        this.x =
+            Math.random() *
+            canvas.width;
+
+        this.y =
+            Math.random() *
+            -canvas.height;
+
+        this.speed =
+            10 +
+            Math.random() * 12;
+
+        this.length =
+            12 +
+            Math.random() * 20;
+    }
+
+    update(){
+
+        this.y +=
+            this.speed *
+            timeScale;
+
+        this.x -=
+            1.5 *
+            timeScale;
+
+        if(
+            this.y >
+            canvas.height
+        ){
+
+            this.reset();
+        }
+    }
+
+    draw(){
+
+        ctx.strokeStyle =
+            "rgba(180,220,255,0.7)";
+
+        ctx.lineWidth = 1;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            this.x,
+            this.y
+        );
+
+        ctx.lineTo(
+            this.x - 3,
+            this.y +
+            this.length
+        );
+
+        ctx.stroke();
+    }
+}
+
+// ----------------------
+// SNOW
+// ----------------------
+
+class SnowParticle {
+
+    constructor(){
+
+        this.reset();
+    }
+
+    reset(){
+
+        this.x =
+            Math.random() *
+            canvas.width;
+
+        this.y =
+            Math.random() *
+            -canvas.height;
+
+        this.size =
+            1 +
+            Math.random() * 4;
+
+        this.speed =
+            0.5 +
+            Math.random() * 2;
+
+        this.offset =
+            Math.random() * 1000;
+    }
+
+    update(){
+
+        this.y +=
+            this.speed *
+            timeScale;
+
+        this.x +=
+            Math.sin(
+                worldTime * 2 +
+                this.offset
+            ) * 0.7;
+
+        if(
+            this.y >
+            canvas.height
+        ){
+
+            this.reset();
+        }
+    }
+
+    draw(){
+
+        ctx.fillStyle =
+            "rgba(255,255,255,0.9)";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            this.x,
+            this.y,
+            this.size,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+    }
+}
+
+// ----------------------
+// LIGHTNING
+// ----------------------
+
+let lightningAlpha = 0;
+
+function updateLightning(){
+
+    if(
+        currentWeather !==
+        "Storm"
+    ) return;
+
+    if(
+        Math.random() <
+        0.003
+    ){
+
+        lightningAlpha =
+            1;
+    }
+
+    lightningAlpha *=
+        0.94;
+}
+
+function drawLightningFlash(){
+
+    if(
+        lightningAlpha <
+        0.01
+    ) return;
+
+    ctx.fillStyle =
+        `rgba(
+            255,
+            255,
+            255,
+            ${lightningAlpha}
+        )`;
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+}
+
+// ----------------------
+// BETTER FIREFLIES
+// ----------------------
+
+class Firefly {
+
+    constructor(){
+
+        this.x =
+            Math.random() *
+            canvas.width;
+
+        this.y =
+            Math.random() *
+            (
+                canvas.height - 120
+            );
+
+        this.size =
+            1 +
+            Math.random() * 3;
+
+        this.offset =
+            Math.random() * 5000;
+
+        this.speed =
+            0.3 +
+            Math.random() * 0.8;
+
+        this.vx = 0;
+        this.vy = 0;
+    }
+
+    update(){
+
+        this.vx +=
+            Math.sin(
+                worldTime * 3 +
+                this.offset
+            ) * 0.02;
+
+        this.vy +=
+            Math.cos(
+                worldTime * 4 +
+                this.offset
+            ) * 0.02;
+
+        this.vx *= 0.98;
+        this.vy *= 0.98;
+
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if(this.x < 0)
+            this.x = canvas.width;
+
+        if(this.x > canvas.width)
+            this.x = 0;
+
+        if(this.y < 0)
+            this.y = canvas.height;
+
+        if(this.y > canvas.height)
+            this.y = 0;
+    }
+
+    draw(){
+
+        const glow =
+
+            (
+                Math.sin(
+                    worldTime * 8 +
+                    this.offset
+                ) + 1
+            ) / 2;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            this.x,
+            this.y,
+            this.size,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fillStyle =
+            `rgba(
+                255,
+                240,
+                120,
+                ${glow}
+            )`;
+
+        ctx.shadowBlur =
+            10 +
+            glow * 20;
+
+        ctx.shadowColor =
+            "#ffee88";
+
+        ctx.fill();
+
+        ctx.shadowBlur = 0;
+    }
+}
+
+// ----------------------
+// SPAWN PARTICLES
+// ----------------------
+
+for(
+    let i = 0;
+    i < 250;
+    i++
+){
+
+    rainParticles.push(
+        new RainParticle()
+    );
+}
+
+for(
+    let i = 0;
+    i < 180;
+    i++
+){
+
+    snowParticles.push(
+        new SnowParticle()
+    );
+}
+
+for(
+    let i = 0;
+    i < 60;
+    i++
+){
+
+    fireflies.push(
+        new Firefly()
+    );
+}
+
+// ----------------------
+// WEATHER RENDERER
+// ----------------------
+
+function drawWeather(){
+
+    if(
+        currentWeather ===
+        "Rain"
+        ||
+        currentWeather ===
+        "Storm"
+    ){
+
+        rainParticles.forEach(
+            rain => {
+
+                rain.update();
+                rain.draw();
+            }
+        );
+    }
+
+    if(
+        currentWeather ===
+        "Snow"
+    ){
+
+        snowParticles.forEach(
+            snow => {
+
+                snow.update();
+                snow.draw();
+            }
+        );
+    }
+
+    updateLightning();
+
+    drawLightningFlash();
+}
+
+// ----------------------
+// FIREFLY RENDERER
+// ----------------------
+
+function drawFireflies(){
+
+    const daylight =
+        getDaylight();
+
+    if(
+        daylight > 0.45
+    ) return;
+
+    fireflies.forEach(
+        firefly => {
+
+            firefly.update();
+            firefly.draw();
+        }
+    );
+}
 // ----------------------
 // MAIN LOOP
 // ----------------------
