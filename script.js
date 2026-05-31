@@ -391,8 +391,8 @@ class Firefly {
 
         ctx.shadowBlur = 0;
     }
-    for(let i = 0; i < 40; i++){
-
+}
+for(let i = 0; i < 40; i++){
     fireflies.push(
         new Firefly()
     );
