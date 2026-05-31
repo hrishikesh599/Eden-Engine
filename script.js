@@ -29,3 +29,15 @@ let mouseX = 0;
 let mouseY = 0;
 
 let watering = false;
+window.addEventListener("load", () => {
+  const loading = document.getElementById("loadingScreen");
+
+  setTimeout(() => {
+    loading.style.opacity = "0";
+
+    setTimeout(() => {
+      loading.style.display = "none";
+    }, 800);
+
+  }, 1000);
+});
