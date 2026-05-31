@@ -59,7 +59,7 @@ function updateSeason(){
             ];
 
         document.getElementById(
-            "seasonText"
+            "seasonDisplay"
         ).textContent =
             "Season: " + season;
     }
