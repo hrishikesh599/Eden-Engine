@@ -1,80 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eden Engin</title>
-  <link rel="stylesheet" href="style.css">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+  <title>
+    Eden Engine V2
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="style.css">
+
 </head>
+
 <body>
+
+  <!-- Loading Screen -->
+
   <div id="loadingScreen">
+
     <div class="loadingCard">
-      <h1>EDEN ENGINE</h1>
-      <p>Initializing Ecosystem...</p>
+
+      <h1>
+        EDEN ENGINE
+      </h1>
+
+      <p>
+        Initializing Ecosystem...
+      </p>
+
       <div class="loadingBar">
+
         <div id="loadingFill"></div>
+
       </div>
+
     </div>
+
   </div>
+
+  <!-- Main Canvas -->
+
   <canvas id="garden"></canvas>
+
+  <!-- Top HUD -->
+
   <div id="hud">
+
     <div class="hudGroup">
-      <span id="seasonDisplay">Season: Spring</span>
-      <span id="weatherDisplay">Weather: Clear</span>
-      <span id="timeDisplay">Day 1</span>
+
+      <span id="seasonDisplay">
+        Season: Spring
+      </span>
+
+      <span id="weatherDisplay">
+        Weather: Clear
+      </span>
+
+      <span id="timeDisplay">
+        Day 1
+      </span>
+
     </div>
+
     <div class="hudGroup">
-      <span id="plantCount">Plants: 0</span>
-      <span id="fpsCounter">FPS: 60</span>
+
+      <span id="plantCount">
+        Plants: 0
+      </span>
+
+      <span id="fpsCounter">
+        FPS: 60
+      </span>
+
     </div>
+
   </div>
+
+  <!-- Control Panel -->
+
   <div id="controlPanel">
-    <h2>Eden Controls</h2>
+
+    <h2>
+      Eden Controls
+    </h2>
+
     <div class="buttonRow">
-      <button onclick="setTimeScale(1)">1x</button>
-      <button onclick="setTimeScale(5)">5x</button>
-      <button onclick="setTimeScale(20)">20x</button>
-      <button onclick="setTimeScale(100)">100x</button>
+
+      <button onclick="setTimeScale(1)">
+        1x
+      </button>
+
+      <button onclick="setTimeScale(5)">
+        5x
+      </button>
+
+      <button onclick="setTimeScale(20)">
+        20x
+      </button>
+
+      <button onclick="setTimeScale(100)">
+        100x
+      </button>
+
     </div>
+
     <div class="buttonRow">
-      <button id="toggleRain">Rain</button>
-      <button id="toggleSnow">Snow</button>
-      <button id="toggleStorm">Storm</button>
+
+      <button id="toggleRain">
+        Rain
+      </button>
+
+      <button id="toggleSnow">
+        Snow
+      </button>
+
+      <button id="toggleStorm">
+        Storm
+      </button>
+
     </div>
+
   </div>
+
+  <!-- Ecosystem Statistics -->
+
   <div id="statsPanel">
-    <h3>Ecosystem</h3>
-    <p>Seeds:<span id="seedStat">0</span></p>
-    <p>Mature Plants:<span id="matureStat">0</span></p>
-    <p>Average Water:<span id="waterStat">0</span></p>
-    <p>Average Energy:<span id="energyStat">0</span></p>
+
+    <h3>
+      Ecosystem
+    </h3>
+
+    <p>
+      Seeds:
+      <span id="seedStat">
+        0
+      </span>
+    </p>
+
+    <p>
+      Mature Plants:
+      <span id="matureStat">
+        0
+      </span>
+    </p>
+
+    <p>
+      Average Water:
+      <span id="waterStat">
+        0
+      </span>
+    </p>
+
+    <p>
+      Average Energy:
+      <span id="energyStat">
+        0
+      </span>
+    </p>
+
   </div>
+
+  <!-- Help Overlay -->
+
   <div id="helpOverlay">
-    <h2>Controls</h2>
+
+    <h2>
+      Controls
+    </h2>
+
     <ul>
+
       <li>
         Click Ground → Plant Seed
       </li>
+
       <li>
         Hold W → Water Plants
       </li>
+
       <li>
         1 / 2 / 3 / 4 → Time Speed
       </li>
+
       <li>
         Mouse Wheel → Zoom
       </li>
+
       <li>
         Middle Mouse → Pan
       </li>
+
       <li>
         H → Toggle Help
       </li>
+
     </ul>
+
   </div>
+
+  <!-- Version -->
+
   <div id="versionTag">
-    Eden Engine V3
+
+    Eden Engine V2
+
   </div>
+
   <script src="script.js"></script>
+
 </body>
+
 </html>
