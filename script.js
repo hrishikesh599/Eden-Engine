@@ -32,13 +32,25 @@ function setTimeScale(scale) {
 
 function createDNA() {
   return {
-    growthRate: 0.00008 + Math.random() * 0.00012,
-    maxSegments: 10 + Math.floor(Math.random() * 22),
-    branchChance: 0.15 + Math.random() * 0.4,
-    leafSize: 14 + Math.random() * 10,
-    flowerHue: Math.random() * 360,
-    leanStrength: 0.1 + Math.random() * 0.25,
-    hue: 90 + Math.random() * 60
+    growthRate: 0.00008 + Math.random() * 0.00008,
+
+    maxSegments:
+      40 + Math.floor(Math.random() * 15),
+
+    branchChance:
+      0.35 + Math.random() * 0.35,
+
+    leafSize:
+      16 + Math.random() * 8,
+
+    flowerHue:
+      Math.random() * 360,
+
+    leanStrength:
+      0.05 + Math.random() * 0.15,
+
+    hue:
+      90 + Math.random() * 60
   };
 }
 
@@ -226,12 +238,12 @@ class Plant {
       (Math.random() - 0.5) * 0.3;
 
     const length =
-      7 + Math.random() * 10;
+      12 + Math.random() * 12;
 
     const thickness =
       Math.max(
-        1,
-        5 - list.length * 0.2
+        2,
+        8 - list.length * 0.15
       );
 
     const endX =
@@ -393,8 +405,8 @@ class Plant {
     this.branches.forEach(branch => {
 
       if (
-        branch.segments.length < 5 &&
-        Math.random() < 0.01
+        branch.segments.length < 12 &&
+        Math.random() < 0.03
       ) {
 
         let bx = branch.source.endX;
@@ -417,7 +429,7 @@ class Plant {
         }
 
         const length =
-          6 + Math.random() * 7;
+          10 + Math.random() * 12;
 
         branch.segments.push({
           x: bx,
