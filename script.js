@@ -241,13 +241,13 @@ function drawSunMoon(){
         canvas.width/2;
 
     const centerY =
-        canvas.height*3.15;
+        canvas.height*1.15;
 
     const radiusX =
         canvas.width*0.45;
 
     const radiusY =
-        canvas.height*0.85;
+        canvas.height*0.65;
 
     const sunX =
         centerX +
@@ -312,6 +312,92 @@ function drawSunMoon(){
 
     ctx.shadowBlur = 0;
 }
+class Firefly {
+
+    constructor() {
+
+        this.x =
+            Math.random() *
+            canvas.width;
+
+        this.y =
+            Math.random() *
+            canvas.height *
+            0.7;
+
+        this.offset =
+            Math.random() * 1000;
+
+        this.size =
+            1 + Math.random() * 2;
+
+        this.speed =
+            0.2 + Math.random() * 0.4;
+    }    
+
+    update() {
+
+        this.x +=
+            Math.sin(
+                Date.now() * 0.001 *
+                this.speed +
+                this.offset
+            ) * 0.5;
+
+        this.y +=
+            Math.cos(
+                Date.now() * 0.001 *
+                this.speed +
+                this.offset
+            ) * 0.3;
+    }
+
+    draw() {
+
+        const glow =
+
+            (
+                Math.sin(
+                    Date.now() * 0.004 +
+                    this.offset
+                ) + 1
+            ) / 2;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            this.x,
+            this.y,
+            this.size,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fillStyle =
+            `rgba(
+                255,
+                255,
+                120,
+                ${glow}
+            )`;
+
+        ctx.shadowBlur =
+            20 + glow * 15;
+
+        ctx.shadowColor =
+            "rgba(255,255,150,1)";
+
+        ctx.fill();
+
+        ctx.shadowBlur = 0;
+    }
+    for(let i = 0; i < 40; i++){
+
+    fireflies.push(
+        new Firefly()
+    );
+}
+
 function animate(){
 
     requestAnimationFrame(
@@ -328,6 +414,18 @@ function animate(){
 
     drawBackground();
     drawSunMoon();
+    const cycle =
+    (Math.sin(worldTime)+1)/2;
+
+if(cycle < 0.45){
+
+    fireflies.forEach(f => {
+
+        f.update();
+        f.draw();
+
+    });
+}
 }
 
 animate();
