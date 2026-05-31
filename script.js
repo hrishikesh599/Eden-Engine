@@ -529,6 +529,46 @@ class Plant {
                 )
         });
     }
+    maybeCreateBranch(){
+
+    if(
+        this.segments.length < 5
+    ) return;
+
+    if(
+        Math.random() > 0.15
+    ) return;
+
+    const sourceIndex =
+        Math.floor(
+            Math.random() *
+            (this.segments.length - 2)
+        );
+
+    const source =
+        this.segments[sourceIndex];
+
+    this.branches.push({
+
+        sourceIndex,
+
+        segments: [],
+
+        angleOffset:
+
+            (Math.random() > 0.5
+                ? 1
+                : -1)
+
+            *
+
+            (
+                0.8 +
+                Math.random()*0.8
+            )
+
+    });
+}
 
     update(){
 
@@ -544,6 +584,11 @@ class Plant {
             this.growthTimer = 0;
 
             this.growSegment();
+            if(
+                Math.random() < 0.25
+            ){
+                this.maybeCreateBranch();
+            }
         }
 
         const wind =
@@ -591,6 +636,60 @@ class Plant {
                     seg.renderAngle
                 ) *
                 seg.length;
+        });
+        this.branches.forEach(branch => {
+            if(
+                branch.segments.length < 10 &&
+                Math.random() < 0.03
+            ){
+                let x;
+                let y;
+                let angle;
+                if(
+                    branch.segments.length === 0
+                ){
+                    const source =
+                    this.segments[
+                        branch.sourceIndex
+                    ];
+                    x = source.endX;
+                    y = source.endY;
+                    angle =
+                    source.renderAngle +
+                    branch.angleOffset;
+                }else{
+                    const prev =
+                    branch.segments[
+                        branch.segments.length - 1
+                    ];
+                    x = prev.endX;
+                    y = prev.endY;
+                    angle =
+                    prev.angle +
+                    (
+                        Math.random()-0.5
+                    ) * 0.2;
+                }
+                const length =
+                8 +
+                Math.random()*6;
+                branch.segments.push({
+                    x,
+                    y,
+                    angle,
+                    length,
+                    thickness:
+                    2,
+                    endX:
+                    x +
+                    Math.cos(angle) *
+                    length,
+                    endY:
+                    y +
+                    Math.sin(angle) *
+                    length
+                });
+            }
         });
     }
 
@@ -736,6 +835,45 @@ function drawLeaf(
     ctx.fill();
 
     ctx.restore();
+    this.branches.forEach(branch => {
+
+    branch.segments.forEach((seg,i)=>{
+
+        ctx.strokeStyle =
+            "#557b3f";
+
+        ctx.lineWidth =
+            Math.max(
+                1,
+                seg.thickness -
+                i * 0.1
+            );
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            seg.x,
+            seg.y
+        );
+
+        ctx.lineTo(
+            seg.endX,
+            seg.endY
+        );
+
+        ctx.stroke();
+
+        drawLeaf(
+
+            seg.endX,
+            seg.endY,
+
+            seg.angle,
+
+            10
+        );
+    });
+});
 }
 function animate(){
 
