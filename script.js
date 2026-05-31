@@ -694,8 +694,9 @@ class Plant {
 
     draw(){
 
-    this.segments.forEach(
-        (seg,i)=>{
+    // MAIN STEM
+
+    this.segments.forEach((seg,i)=>{
 
         const brightness =
             25 + i * 1.5;
@@ -730,77 +731,79 @@ class Plant {
         );
 
         ctx.stroke();
-        this.branches.forEach(branch => {
 
-    branch.segments.forEach((seg,i)=>{
-
-        ctx.strokeStyle =
-            "#557b3f";
-
-        ctx.lineWidth =
-            Math.max(
-                1,
-                seg.thickness -
-                i * 0.1
-            );
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            seg.x,
-            seg.y
-        );
-
-        ctx.lineTo(
-            seg.endX,
-            seg.endY
-        );
-
-        ctx.stroke();
-
-        drawLeaf(
-
-            seg.endX,
-            seg.endY,
-
-            seg.angle,
-
-            10
-        );
-    });
-});
-
-        // leaves
+        // LEAVES
 
         if(i > 2){
 
-    const side =
-        i % 2 === 0 ? 1 : -1;
+            const side =
+                i % 2 === 0 ? 1 : -1;
 
-    const offset = 10;
+            const offset = 10;
 
-    drawLeaf(
+            drawLeaf(
 
-        seg.endX +
-        Math.cos(
-            seg.renderAngle +
-            side * Math.PI/2
-        ) * offset,
+                seg.endX +
+                Math.cos(
+                    seg.renderAngle +
+                    side * Math.PI/2
+                ) * offset,
 
-        seg.endY +
-        Math.sin(
-            seg.renderAngle +
-            side * Math.PI/2
-        ) * offset,
+                seg.endY +
+                Math.sin(
+                    seg.renderAngle +
+                    side * Math.PI/2
+                ) * offset,
 
-        seg.renderAngle +
-        side * 0.5,
+                seg.renderAngle +
+                side * 0.5,
 
-        14
-    );
-}
+                14
+            );
+        }
     });
-}
+
+    // BRANCHES
+
+    this.branches.forEach(branch => {
+
+        branch.segments.forEach((seg,i)=>{
+
+            ctx.strokeStyle =
+                "#557b3f";
+
+            ctx.lineWidth =
+                Math.max(
+                    1,
+                    seg.thickness -
+                    i * 0.1
+                );
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                seg.x,
+                seg.y
+            );
+
+            ctx.lineTo(
+                seg.endX,
+                seg.endY
+            );
+
+            ctx.stroke();
+
+            drawLeaf(
+
+                seg.endX,
+                seg.endY,
+
+                seg.angle,
+
+                10
+            );
+        });
+    });
 }
 function drawLeaf(
     x,
