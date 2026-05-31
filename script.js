@@ -397,7 +397,7 @@ class Firefly {
         new Firefly()
     );
 }
-
+animate()
 function animate(){
 
     requestAnimationFrame(
