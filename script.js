@@ -241,10 +241,10 @@ function drawSunMoon(){
         canvas.width/2;
 
     const centerY =
-        canvas.height*3.15;
+        canvas.height*2.15;
 
     const radiusX =
-        canvas.width*0.45;
+        canvas.width*0.55;
 
     const radiusY =
         canvas.height*0.85;
