@@ -689,9 +689,8 @@ class Plant {
                     Math.sin(angle) *
                     length
                 });
-            }
-        });
-    }
+            }});
+        }
 
     draw(){
 
@@ -731,6 +730,45 @@ class Plant {
         );
 
         ctx.stroke();
+        this.branches.forEach(branch => {
+
+    branch.segments.forEach((seg,i)=>{
+
+        ctx.strokeStyle =
+            "#557b3f";
+
+        ctx.lineWidth =
+            Math.max(
+                1,
+                seg.thickness -
+                i * 0.1
+            );
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            seg.x,
+            seg.y
+        );
+
+        ctx.lineTo(
+            seg.endX,
+            seg.endY
+        );
+
+        ctx.stroke();
+
+        drawLeaf(
+
+            seg.endX,
+            seg.endY,
+
+            seg.angle,
+
+            10
+        );
+    });
+});
 
         // leaves
 
@@ -835,45 +873,6 @@ function drawLeaf(
     ctx.fill();
 
     ctx.restore();
-    this.branches.forEach(branch => {
-
-    branch.segments.forEach((seg,i)=>{
-
-        ctx.strokeStyle =
-            "#557b3f";
-
-        ctx.lineWidth =
-            Math.max(
-                1,
-                seg.thickness -
-                i * 0.1
-            );
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            seg.x,
-            seg.y
-        );
-
-        ctx.lineTo(
-            seg.endX,
-            seg.endY
-        );
-
-        ctx.stroke();
-
-        drawLeaf(
-
-            seg.endX,
-            seg.endY,
-
-            seg.angle,
-
-            10
-        );
-    });
-});
 }
 function animate(){
 
