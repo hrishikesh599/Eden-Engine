@@ -448,6 +448,7 @@ function animate(){
     updateWeather();
 
     drawBackground();
+    drawGrass();
     for(
     let i = seeds.length - 1;
     i >= 0;
