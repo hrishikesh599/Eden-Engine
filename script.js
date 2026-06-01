@@ -659,30 +659,30 @@ class Plant {
 
     draw(){
 
-        this.segments.forEach(
-            (seg,i)=>{
+    this.segments.forEach(
+        (seg,i)=>{
 
-            ctx.strokeStyle =
-                "#4a8f3a";
+        ctx.strokeStyle =
+            "#4a8f3a";
 
-            ctx.lineWidth =
-                seg.thickness;
+        ctx.lineWidth =
+            seg.thickness;
 
-            ctx.beginPath();
+        ctx.beginPath();
 
-            ctx.moveTo(
-                seg.x,
-                seg.y
-            );
+        ctx.moveTo(
+            seg.x,
+            seg.y
+        );
 
-            ctx.lineTo(
-                seg.endX,
-                seg.endY
-            );
+        ctx.lineTo(
+            seg.endX,
+            seg.endY
+        );
 
-            ctx.stroke();
-        });
-    }
+        ctx.stroke();
+    });
+}
 }
 animate();
 canvas.addEventListener("click", e => {
