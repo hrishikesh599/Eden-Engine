@@ -867,17 +867,32 @@ if(
 
         if(i > 2){
 
-            drawLeaf(
+    const side =
+        i % 2 === 0 ? 1 : -1;
 
-                seg.endX,
-                seg.endY,
+    const offset =
+        8 + Math.sin(i * 0.4) * 3;
 
-                seg.renderAngle,
+    drawLeaf(
 
-                8 + Math.sin(i)*2
+        seg.endX +
+        Math.cos(
+            seg.renderAngle +
+            side * Math.PI / 2
+        ) * offset,
 
-            );
-        }
+        seg.endY +
+        Math.sin(
+            seg.renderAngle +
+            side * Math.PI / 2
+        ) * offset,
+
+        seg.renderAngle +
+        side * 0.6,
+
+        7 + Math.random() * 2
+    );
+}
     });
 }
 }
@@ -890,61 +905,26 @@ function drawLeaf(
 
     ctx.save();
 
-    ctx.translate(
-        x,
-        y
-    );
-
-    ctx.rotate(
-        angle
-    );
+    ctx.translate(x, y);
+    ctx.rotate(angle);
 
     ctx.fillStyle =
         "rgba(80,200,80,0.9)";
 
-    ctx.shadowBlur = 8;
-
-    ctx.shadowColor =
-        "rgba(80,255,80,0.8)";
-
-    // left leaf
-
     ctx.beginPath();
 
-    ctx.moveTo(0,0);
-
-    ctx.quadraticCurveTo(
-        -size,
-        -size/2,
-        -size*2,
-        0
-    );
-
-    ctx.quadraticCurveTo(
-        -size,
-        size/2,
-        0,
-        0
-    );
-
-    ctx.fill();
-
-    // right leaf
-
-    ctx.beginPath();
-
-    ctx.moveTo(0,0);
+    ctx.moveTo(0, 0);
 
     ctx.quadraticCurveTo(
         size,
-        -size/2,
-        size*2,
+        -size,
+        size * 2,
         0
     );
 
     ctx.quadraticCurveTo(
         size,
-        size/2,
+        size,
         0,
         0
     );
