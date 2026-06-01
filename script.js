@@ -662,8 +662,15 @@ class Plant {
     this.segments.forEach(
         (seg,i)=>{
 
+        const brightness =
+            25 + i * 1.5;
+
         ctx.strokeStyle =
-            "#4a8f3a";
+            `hsl(
+                110,
+                40%,
+                ${brightness}%
+            )`;
 
         ctx.lineWidth =
             seg.thickness;
@@ -675,12 +682,35 @@ class Plant {
             seg.y
         );
 
-        ctx.lineTo(
+        ctx.quadraticCurveTo(
+
+            (seg.x + seg.endX)/2 +
+            Math.sin(i) * 3,
+
+            (seg.y + seg.endY)/2,
+
             seg.endX,
             seg.endY
+
         );
 
         ctx.stroke();
+
+        // leaves
+
+        if(i > 2){
+
+            drawLeaf(
+
+                seg.endX,
+                seg.endY,
+
+                seg.renderAngle,
+
+                8 + Math.sin(i)*2
+
+            );
+        }
     });
 }
 }
