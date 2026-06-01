@@ -64,7 +64,134 @@ function updateSeason(){
         );
     }
 }
+let weather = "Clear";
 
+let weatherTimer = 0;
+function updateWeather(){
+
+    weatherTimer +=
+        0.01 * timeScale;
+
+    if(weatherTimer > 400){
+
+        weatherTimer = 0;
+
+        const roll =
+            Math.random();
+
+        if(roll < 0.25)
+            weather = "Clear";
+
+        else if(roll < 0.5)
+            weather = "Rain";
+
+        else if(roll < 0.75)
+            weather = "Storm";
+
+        else
+            weather = "Snow";
+
+        console.log(
+            "Weather:",
+            weather
+        );
+    }
+}
+function getSeasonSky(){
+
+    switch(season){
+
+        case "Spring":
+            return [
+                "#6db8ff",
+                "#bfe7ff"
+            ];
+
+        case "Summer":
+            return [
+                "#3f9dff",
+                "#dff6ff"
+            ];
+
+        case "Autumn":
+            return [
+                "#ff9455",
+                "#ffd9a8"
+            ];
+
+        case "Winter":
+            return [
+                "#6d88b8",
+                "#e6eefc"
+            ];
+    }
+
+    return [
+        "#6db8ff",
+        "#bfe7ff"
+    ];
+}
+function drawBackground(){
+
+    const colors =
+        getSeasonSky();
+
+    const gradient =
+        ctx.createLinearGradient(
+            0,
+            0,
+            0,
+            canvas.height
+        );
+
+    gradient.addColorStop(
+        0,
+        colors[0]
+    );
+
+    gradient.addColorStop(
+        1,
+        colors[1]
+    );
+
+    ctx.fillStyle =
+        gradient;
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    ctx.fillStyle =
+        "#1f4f1f";
+
+    ctx.fillRect(
+        0,
+        canvas.height - 80,
+        canvas.width,
+        80
+    );
+}
+function animate(){
+
+    requestAnimationFrame(
+        animate
+    );
+
+    worldTime +=
+        0.001 *
+        timeScale;
+
+    updateSeason();
+
+    updateWeather();
+
+    drawBackground();
+}
+
+animate();
 
 
 window.addEventListener("load", () => {
