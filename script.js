@@ -663,32 +663,133 @@ class Plant {
 
     draw(){
 
-        this.segments.forEach(
-            (seg,i)=>{
+    this.segments.forEach(
+        (seg,i)=>{
 
-            ctx.strokeStyle =
-                "#4a8f3a";
+        const brightness =
+            25 + i * 1.5;
 
-            ctx.lineWidth =
-                seg.thickness;
+        ctx.strokeStyle =
+            `hsl(
+                110,
+                40%,
+                ${brightness}%
+            )`;
 
-            ctx.beginPath();
+        ctx.lineWidth =
+            seg.thickness;
 
-            ctx.moveTo(
-                seg.x,
-                seg.y
-            );
+        ctx.beginPath();
 
-            ctx.lineTo(
+        ctx.moveTo(
+            seg.x,
+            seg.y
+        );
+
+        ctx.quadraticCurveTo(
+
+            (seg.x + seg.endX)/2 +
+            Math.sin(i) * 3,
+
+            (seg.y + seg.endY)/2,
+
+            seg.endX,
+            seg.endY
+
+        );
+
+        ctx.stroke();
+
+        // leaves
+
+        if(i > 2){
+
+            drawLeaf(
+
                 seg.endX,
-                seg.endY
+                seg.endY,
+
+                seg.renderAngle,
+
+                8 + Math.sin(i)*2
+
             );
-
-            ctx.stroke();
-        });
-    }
+        }
+    });
 }
+}
+function drawLeaf(
+    x,
+    y,
+    angle,
+    size
+){
 
+    ctx.save();
+
+    ctx.translate(
+        x,
+        y
+    );
+
+    ctx.rotate(
+        angle
+    );
+
+    ctx.fillStyle =
+        "rgba(80,200,80,0.9)";
+
+    ctx.shadowBlur = 8;
+
+    ctx.shadowColor =
+        "rgba(80,255,80,0.8)";
+
+    // left leaf
+
+    ctx.beginPath();
+
+    ctx.moveTo(0,0);
+
+    ctx.quadraticCurveTo(
+        -size,
+        -size/2,
+        -size*2,
+        0
+    );
+
+    ctx.quadraticCurveTo(
+        -size,
+        size/2,
+        0,
+        0
+    );
+
+    ctx.fill();
+
+    // right leaf
+
+    ctx.beginPath();
+
+    ctx.moveTo(0,0);
+
+    ctx.quadraticCurveTo(
+        size,
+        -size/2,
+        size*2,
+        0
+    );
+
+    ctx.quadraticCurveTo(
+        size,
+        size/2,
+        0,
+        0
+    );
+
+    ctx.fill();
+
+    ctx.restore();
+}
 window.addEventListener("load", () => {
   const loading = document.getElementById("loadingScreen");
 
