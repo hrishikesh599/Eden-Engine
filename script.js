@@ -316,37 +316,6 @@ function drawSunMoon(){
 
     ctx.shadowBlur = 0;
 }
-function drawGrass(){
-
-    for(let x = 0; x < canvas.width; x += 4){
-
-        const h =
-            8 +
-            Math.sin(
-                x * 0.05 +
-                worldTime * 2
-            ) * 4;
-
-        ctx.strokeStyle =
-            "#3b7d2b";
-
-        ctx.lineWidth = 1;
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            x,
-            canvas.height - 80
-        );
-
-        ctx.lineTo(
-            x,
-            canvas.height - 80 - h
-        );
-
-        ctx.stroke();
-    }
-}
 class Firefly {
 
     constructor() {
@@ -448,7 +417,6 @@ function animate(){
     updateWeather();
 
     drawBackground();
-    drawGrass();
     for(
     let i = seeds.length - 1;
     i >= 0;
@@ -687,6 +655,54 @@ class Plant {
                 ) *
                 seg.length;
         });
+<<<<<<< HEAD
+        this.branches.forEach(branch => {
+            if(
+                branch.segments.length < 10 &&
+                Math.random() < 0.03
+            ){
+                let x;
+                let y;
+                let angle;
+                if(
+                    branch.segments.length === 0
+                ){
+                    const source =
+                    this.segments[
+                        branch.sourceIndex
+                    ];
+                    x = source.endX;
+                    y = source.endY;
+                    angle =
+                    source.renderAngle +
+                    branch.angleOffset;
+                }else{
+                    const prev =
+                    branch.segments[
+                        branch.segments.length - 1
+                    ];
+                    x = prev.endX;
+                    y = prev.endY;
+                    angle =
+                    prev.angle +
+                    (
+                        Math.random()-0.5
+                    ) * 0.2;
+                }
+                const length =
+                8 +
+                Math.random()*6;
+                branch.segments.push({
+                    x,
+                    y,
+                    angle,
+                    length,
+                    thickness:
+                    2,
+                    endX:
+                    x +
+                    Math.cos(angle) *
+=======
     }
 
     draw(){
@@ -710,6 +726,7 @@ class Plant {
         ctx.beginPath();
 
         ctx.moveTo(
+>>>>>>> a3555a816a824c0d1aa0e41ae983e2387ab8878e
             seg.x,
             seg.y
 
