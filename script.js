@@ -506,6 +506,10 @@ class Seed {
 // PHASE 10A - PLANT
 // =========================
 
+// =========================
+// PHASE 11 - SEGMENTED PLANT
+// =========================
+
 class Plant {
 
     constructor(x,y){
@@ -513,48 +517,175 @@ class Plant {
         this.x = x;
         this.y = y;
 
-        this.height = 0;
+        this.segments = [];
 
-        this.maxHeight =
-            50 + Math.random() * 120;
+        this.growthTimer = 0;
 
-        this.dead = false;
+        this.maxSegments =
+            12 +
+            Math.floor(
+                Math.random() * 12
+            );
+
+        this.windOffset =
+            Math.random() * 1000;
+    }
+
+    growSegment(){
+
+        let x = this.x;
+        let y = this.y;
+
+        let angle =
+            -Math.PI / 2;
+
+        if(
+            this.segments.length > 0
+        ){
+
+            const prev =
+                this.segments[
+                    this.segments.length - 1
+                ];
+
+            x = prev.endX;
+            y = prev.endY;
+
+            angle = prev.angle;
+        }
+
+        angle +=
+            (Math.random()-0.5) *
+            0.25;
+
+        const length =
+            10 +
+            Math.random() * 8;
+
+        const endX =
+            x +
+            Math.cos(angle) *
+            length;
+
+        const endY =
+            y +
+            Math.sin(angle) *
+            length;
+
+        this.segments.push({
+
+            x,
+            y,
+
+            endX,
+            endY,
+
+            angle,
+
+            renderAngle:
+                angle,
+
+            length,
+
+            thickness:
+                Math.max(
+                    1,
+                    7 -
+                    this.segments.length *
+                    0.3
+                )
+        });
     }
 
     update(){
 
-        if(this.dead) return;
+        this.growthTimer +=
+            0.02 * timeScale;
 
         if(
-            this.height <
-            this.maxHeight
+            this.growthTimer > 1 &&
+            this.segments.length <
+            this.maxSegments
         ){
 
-            this.height +=
-                0.3 * timeScale;
+            this.growthTimer = 0;
+
+            this.growSegment();
         }
+
+        const wind =
+            Math.sin(
+                Date.now()*0.0008 +
+                this.windOffset
+            ) * 0.08;
+
+        this.segments.forEach(
+            (seg,i)=>{
+
+            seg.renderAngle =
+                seg.angle +
+
+                Math.sin(
+                    Date.now()*0.001 +
+                    i*0.5 +
+                    this.windOffset
+                ) * 0.05 +
+
+                wind;
+
+            if(i > 0){
+
+                const prev =
+                    this.segments[i-1];
+
+                seg.x =
+                    prev.endX;
+
+                seg.y =
+                    prev.endY;
+            }
+
+            seg.endX =
+                seg.x +
+                Math.cos(
+                    seg.renderAngle
+                ) *
+                seg.length;
+
+            seg.endY =
+                seg.y +
+                Math.sin(
+                    seg.renderAngle
+                ) *
+                seg.length;
+        });
     }
 
     draw(){
 
-        ctx.strokeStyle =
-            "#3d7a2c";
+        this.segments.forEach(
+            (seg,i)=>{
 
-        ctx.lineWidth = 4;
+            ctx.strokeStyle =
+                "#4a8f3a";
 
-        ctx.beginPath();
+            ctx.lineWidth =
+                seg.thickness;
 
-        ctx.moveTo(
-            this.x,
-            this.y
-        );
+            ctx.beginPath();
 
-        ctx.lineTo(
-            this.x,
-            this.y - this.height
-        );
+            ctx.moveTo(
+                seg.x,
+                seg.y
+            );
 
-        ctx.stroke();
+            ctx.lineTo(
+                seg.endX,
+                seg.endY
+            );
+
+            ctx.stroke();
+        });
     }
 }
 animate();
