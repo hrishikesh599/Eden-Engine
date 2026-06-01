@@ -174,6 +174,18 @@ function drawBackground(){
         canvas.width,
         canvas.height
     );
+    if(weather === "Storm"){
+
+    ctx.fillStyle =
+        "rgba(20,20,30,0.35)";
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+}
 
     // Night overlay
 
@@ -411,6 +423,19 @@ for(let i = 0; i < 40; i++){
         new Firefly()
     );
 }
+for(let i=0;i<150;i++){
+
+    rainParticles.push(
+        new RainParticle()
+    );
+}
+
+for(let i=0;i<100;i++){
+
+    snowParticles.push(
+        new SnowParticle()
+    );
+}
 function animate(){
 
     requestAnimationFrame(
@@ -426,6 +451,28 @@ function animate(){
     updateWeather();
 
     drawBackground();
+    if(
+    weather === "Rain" ||
+    weather === "Storm"
+){
+
+    rainParticles.forEach(r=>{
+
+        r.update();
+        r.draw();
+
+    });
+}
+
+if(weather === "Snow"){
+
+    snowParticles.forEach(s=>{
+
+        s.update();
+        s.draw();
+
+    });
+}
     if(
     watering &&
     mouseY >
@@ -526,6 +573,14 @@ if(cycle < 0.45){
 
     });
 }
+ctx.fillStyle = "white";
+ctx.font = "20px Arial";
+
+ctx.fillText(
+    `${season} | ${weather}`,
+    20,
+    40
+);
 }
 // =========================
 // PHASE 9 - SEEDS
@@ -606,6 +661,113 @@ class WetSpot {
             this.radius,
             12,
             0,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+    }
+}
+class RainParticle {
+
+    constructor(){
+
+        this.x =
+            Math.random() * canvas.width;
+
+        this.y = -20;
+
+        this.speed =
+            8 + Math.random() * 6;
+
+        this.length =
+            10 + Math.random() * 8;
+    }
+
+    update(){
+
+        this.y += this.speed;
+
+        this.x += 1;
+
+        if(this.y > canvas.height){
+
+            this.y = -20;
+            this.x =
+                Math.random() *
+                canvas.width;
+        }
+    }
+
+    draw(){
+
+        ctx.strokeStyle =
+            "rgba(180,220,255,0.8)";
+
+        ctx.lineWidth = 2;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            this.x,
+            this.y
+        );
+
+        ctx.lineTo(
+            this.x + 2,
+            this.y + this.length
+        );
+
+        ctx.stroke();
+    }
+}
+class SnowParticle {
+
+    constructor(){
+
+        this.x =
+            Math.random() * canvas.width;
+
+        this.y =
+            Math.random() * canvas.height;
+
+        this.size =
+            2 + Math.random() * 3;
+
+        this.speed =
+            0.5 + Math.random();
+    }
+
+    update(){
+
+        this.y += this.speed;
+
+        this.x +=
+            Math.sin(
+                this.y * 0.01
+            );
+
+        if(this.y > canvas.height){
+
+            this.y = -10;
+
+            this.x =
+                Math.random() *
+                canvas.width;
+        }
+    }
+
+    draw(){
+
+        ctx.fillStyle =
+            "rgba(255,255,255,0.9)";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            this.x,
+            this.y,
+            this.size,
             0,
             Math.PI * 2
         );
@@ -748,8 +910,15 @@ class Plant {
 
         let growthThreshold = 6;
 
-if(watering){
+if(
+    watering ||
+    weather === "Rain"
+){
     growthThreshold = 3;
+}
+
+if(weather === "Storm"){
+    growthThreshold = 2;
 }
 
 if(season === "Winter"){
