@@ -25,8 +25,17 @@ const fireflies = [];
 
 const fallingSeeds = [];
 
+const waterDrops = [];
+const wetSpots = [];
+
 let mouseX = 0;
 let mouseY = 0;
+canvas.addEventListener("mousemove", e => {
+
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+});
 
 let watering = false;
 let season = "Spring";
@@ -417,6 +426,48 @@ function animate(){
     updateWeather();
 
     drawBackground();
+    if(
+    watering &&
+    mouseY >
+    canvas.height - 150
+){
+
+    for(let i=0;i<3;i++){
+
+        waterDrops.push(
+
+            new WaterDrop(
+
+                mouseX +
+                (Math.random()-0.5)*20,
+
+                mouseY
+            )
+        );
+    }
+
+    if(Math.random() < 0.05){
+
+        wetSpots.push(
+            new WetSpot(mouseX)
+        );
+    }
+}
+for(
+    let i = wetSpots.length - 1;
+    i >= 0;
+    i--
+){
+
+    wetSpots[i].update();
+    wetSpots[i].draw();
+
+    if(
+        wetSpots[i].life <= 0
+    ){
+        wetSpots.splice(i,1);
+    }
+}
     for(
     let i = seeds.length - 1;
     i >= 0;
@@ -438,6 +489,21 @@ function animate(){
         );
 
         seeds.splice(i,1);
+    }
+}
+for(
+    let i = waterDrops.length - 1;
+    i >= 0;
+    i--
+){
+
+    waterDrops[i].update();
+    waterDrops[i].draw();
+
+    if(
+        waterDrops[i].life <= 0
+    ){
+        waterDrops.splice(i,1);
     }
 }
 plants.forEach(plant => {
@@ -464,7 +530,89 @@ if(cycle < 0.45){
 // =========================
 // PHASE 9 - SEEDS
 // =========================
+class WaterDrop {
 
+    constructor(x, y){
+
+        this.x = x;
+        this.y = y;
+
+        this.life = 1;
+
+        this.vx =
+            (Math.random() - 0.5) * 2;
+
+        this.vy =
+            1 + Math.random() * 2;
+    }
+
+    update(){
+
+        this.x += this.vx;
+        this.y += this.vy;
+
+        this.life -= 0.02;
+    }
+
+    draw(){
+
+        ctx.fillStyle =
+            `rgba(100,180,255,${this.life})`;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            this.x,
+            this.y,
+            2,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+    }
+}
+class WetSpot {
+
+    constructor(x){
+
+        this.x = x;
+        this.life = 1;
+
+        this.radius =
+            30 + Math.random() * 20;
+    }
+
+    update(){
+
+        this.life -= 0.0008;
+    }
+
+    draw(){
+
+        ctx.fillStyle =
+            `rgba(
+                40,
+                25,
+                15,
+                ${this.life * 0.6}
+            )`;
+
+        ctx.beginPath();
+
+        ctx.ellipse(
+            this.x,
+            canvas.height - 40,
+            this.radius,
+            12,
+            0,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+    }
+}
 class Seed {
 
     constructor(x, y){
@@ -596,13 +744,24 @@ class Plant {
     update(){
 
         this.growthTimer +=
-            0.02 * timeScale;
+            0.003 * timeScale;
 
-        if(
-            this.growthTimer > 1 &&
-            this.segments.length <
-            this.maxSegments
-        ){
+        let growthThreshold = 6;
+
+if(watering){
+    growthThreshold = 3;
+}
+
+if(season === "Winter"){
+    growthThreshold = 12;
+}
+
+if(
+    this.growthTimer >
+    growthThreshold &&
+    this.segments.length <
+    this.maxSegments
+){
 
             this.growthTimer = 0;
 
@@ -610,10 +769,18 @@ class Plant {
         }
 
         const wind =
-            Math.sin(
-                Date.now()*0.0008 +
-                this.windOffset
-            ) * 0.08;
+
+    Math.sin(
+        Date.now()*0.0004 +
+        this.windOffset
+    ) * 0.05
+
+    +
+
+    Math.sin(
+        Date.now()*0.0011 +
+        this.windOffset
+    ) * 0.03;
 
         this.segments.forEach(
             (seg,i)=>{
@@ -625,7 +792,7 @@ class Plant {
                     Date.now()*0.001 +
                     i*0.5 +
                     this.windOffset
-                ) * 0.05 +
+                ) * (0.01 + i * 0.003) +
 
                 wind;
 
@@ -787,6 +954,20 @@ function drawLeaf(
     ctx.restore();
 }
 animate();
+canvas.addEventListener(
+    "mousedown",
+    () => watering = true
+);
+
+canvas.addEventListener(
+    "mouseup",
+    () => watering = false
+);
+
+canvas.addEventListener(
+    "mouseleave",
+    () => watering = false
+);
 canvas.addEventListener("click", e => {
 
     if(
