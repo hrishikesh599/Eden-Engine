@@ -718,78 +718,7 @@ class Plant {
     });
 }
 }
-function drawLeaf(
-    x,
-    y,
-    angle,
-    size
-){
 
-    ctx.save();
-
-    ctx.translate(
-        x,
-        y
-    );
-
-    ctx.rotate(
-        angle
-    );
-
-    ctx.fillStyle =
-        "rgba(80,200,80,0.9)";
-
-    ctx.shadowBlur = 8;
-
-    ctx.shadowColor =
-        "rgba(80,255,80,0.8)";
-
-    // left leaf
-
-    ctx.beginPath();
-
-    ctx.moveTo(0,0);
-
-    ctx.quadraticCurveTo(
-        -size,
-        -size/2,
-        -size*2,
-        0
-    );
-
-    ctx.quadraticCurveTo(
-        -size,
-        size/2,
-        0,
-        0
-    );
-
-    ctx.fill();
-
-    // right leaf
-
-    ctx.beginPath();
-
-    ctx.moveTo(0,0);
-
-    ctx.quadraticCurveTo(
-        size,
-        -size/2,
-        size*2,
-        0
-    );
-
-    ctx.quadraticCurveTo(
-        size,
-        size/2,
-        0,
-        0
-    );
-
-    ctx.fill();
-
-    ctx.restore();
-}
 window.addEventListener("load", () => {
   const loading = document.getElementById("loadingScreen");
 
