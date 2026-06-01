@@ -29,7 +29,41 @@ let mouseX = 0;
 let mouseY = 0;
 
 let watering = false;
+let season = "Spring";
 
+const seasons = [
+    "Spring",
+    "Summer",
+    "Autumn",
+    "Winter"
+];
+
+let seasonTimer = 0;
+function updateSeason(){
+
+    seasonTimer +=
+        0.01 * timeScale;
+
+    if(seasonTimer > 1500){
+
+        seasonTimer = 0;
+
+        let current =
+            seasons.indexOf(season);
+
+        season =
+            seasons[
+                (current + 1)
+                %
+                seasons.length
+            ];
+
+        console.log(
+            "Season:",
+            season
+        );
+    }
+}
 
 
 
