@@ -316,6 +316,37 @@ function drawSunMoon(){
 
     ctx.shadowBlur = 0;
 }
+function drawGrass(){
+
+    for(let x = 0; x < canvas.width; x += 4){
+
+        const h =
+            8 +
+            Math.sin(
+                x * 0.05 +
+                worldTime * 2
+            ) * 4;
+
+        ctx.strokeStyle =
+            "#3b7d2b";
+
+        ctx.lineWidth = 1;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x,
+            canvas.height - 80
+        );
+
+        ctx.lineTo(
+            x,
+            canvas.height - 80 - h
+        );
+
+        ctx.stroke();
+    }
+}
 class Firefly {
 
     constructor() {
@@ -680,18 +711,29 @@ class Plant {
         ctx.moveTo(
             seg.x,
             seg.y
-        );
 
-        ctx.quadraticCurveTo(
+    drawLeaf(
 
-            (seg.x + seg.endX)/2 +
-            Math.sin(i) * 3,
+        seg.endX +
+        Math.cos(
+            seg.renderAngle +
+            side * Math.PI/2
+        ) * offset,
 
-            (seg.y + seg.endY)/2,
+        seg.endY +
+        Math.sin(
+            seg.renderAngle +
+            side * Math.PI/2
+        ) * offset,
 
-            seg.endX,
-            seg.endY
+        seg.renderAngle +
+        side * 0.5,
 
+<<<<<<< HEAD
+        14
+    );
+}
+=======
         );
 
         ctx.stroke();
@@ -725,6 +767,7 @@ class Plant {
         14
     );
 }
+>>>>>>> a3555a816a824c0d1aa0e41ae983e2387ab8878e
     });
 }
 }
