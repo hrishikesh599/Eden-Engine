@@ -417,10 +417,33 @@ function animate(){
     updateWeather();
 
     drawBackground();
-    seeds.forEach(seed => {
+    for(
+    let i = seeds.length - 1;
+    i >= 0;
+    i--
+){
+
+    const seed = seeds[i];
 
     seed.update();
     seed.draw();
+
+    if(seed.germinated){
+
+        plants.push(
+            new Plant(
+                seed.x,
+                seed.y
+            )
+        );
+
+        seeds.splice(i,1);
+    }
+}
+plants.forEach(plant => {
+
+    plant.update();
+    plant.draw();
 
 });
     
@@ -477,6 +500,61 @@ class Seed {
         );
 
         ctx.fill();
+    }
+}
+// =========================
+// PHASE 10A - PLANT
+// =========================
+
+class Plant {
+
+    constructor(x,y){
+
+        this.x = x;
+        this.y = y;
+
+        this.height = 0;
+
+        this.maxHeight =
+            50 + Math.random() * 120;
+
+        this.dead = false;
+    }
+
+    update(){
+
+        if(this.dead) return;
+
+        if(
+            this.height <
+            this.maxHeight
+        ){
+
+            this.height +=
+                0.3 * timeScale;
+        }
+    }
+
+    draw(){
+
+        ctx.strokeStyle =
+            "#3d7a2c";
+
+        ctx.lineWidth = 4;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            this.x,
+            this.y
+        );
+
+        ctx.lineTo(
+            this.x,
+            this.y - this.height
+        );
+
+        ctx.stroke();
     }
 }
 animate();
