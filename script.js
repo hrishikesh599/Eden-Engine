@@ -954,20 +954,21 @@ function drawLeaf(
     ctx.restore();
 }
 animate();
-canvas.addEventListener(
-    "mousedown",
-    () => watering = true
-);
+window.addEventListener("keydown", e => {
 
-canvas.addEventListener(
-    "mouseup",
-    () => watering = false
-);
+    if(e.key.toLowerCase() === "w"){
 
-canvas.addEventListener(
-    "mouseleave",
-    () => watering = false
-);
+        watering = true;
+    }
+});
+
+window.addEventListener("keyup", e => {
+
+    if(e.key.toLowerCase() === "w"){
+
+        watering = false;
+    }
+});
 canvas.addEventListener("click", e => {
 
     if(
