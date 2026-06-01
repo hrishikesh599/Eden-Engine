@@ -506,10 +506,6 @@ class Seed {
 // PHASE 10A - PLANT
 // =========================
 
-// =========================
-// PHASE 11 - SEGMENTED PLANT
-// =========================
-
 class Plant {
 
     constructor(x,y){
@@ -517,207 +513,66 @@ class Plant {
         this.x = x;
         this.y = y;
 
-        this.segments = [];
+        this.height = 0;
 
-        this.growthTimer = 0;
+        this.maxHeight =
+            50 + Math.random() * 120;
 
-        this.maxSegments =
-            12 +
-            Math.floor(
-                Math.random() * 12
-            );
-
-        this.windOffset =
-            Math.random() * 1000;
-    }
-
-    growSegment(){
-
-        let x = this.x;
-        let y = this.y;
-
-        let angle =
-            -Math.PI / 2;
-
-        if(
-            this.segments.length > 0
-        ){
-
-            const prev =
-                this.segments[
-                    this.segments.length - 1
-                ];
-
-            x = prev.endX;
-            y = prev.endY;
-
-            angle = prev.angle;
-        }
-
-        angle +=
-            (Math.random()-0.5) *
-            0.25;
-
-        const length =
-            10 +
-            Math.random() * 8;
-
-        const endX =
-            x +
-            Math.cos(angle) *
-            length;
-
-        const endY =
-            y +
-            Math.sin(angle) *
-            length;
-
-        this.segments.push({
-
-            x,
-            y,
-
-            endX,
-            endY,
-
-            angle,
-
-            renderAngle:
-                angle,
-
-            length,
-
-            thickness:
-                Math.max(
-                    1,
-                    7 -
-                    this.segments.length *
-                    0.3
-                )
-        });
+        this.dead = false;
     }
 
     update(){
 
-        this.growthTimer +=
-            0.02 * timeScale;
+        if(this.dead) return;
 
         if(
-            this.growthTimer > 1 &&
-            this.segments.length <
-            this.maxSegments
+            this.height <
+            this.maxHeight
         ){
 
-            this.growthTimer = 0;
-
-            this.growSegment();
+            this.height +=
+                0.3 * timeScale;
         }
-
-        const wind =
-            Math.sin(
-                Date.now()*0.0008 +
-                this.windOffset
-            ) * 0.08;
-
-        this.segments.forEach(
-            (seg,i)=>{
-
-            seg.renderAngle =
-                seg.angle +
-
-                Math.sin(
-                    Date.now()*0.001 +
-                    i*0.5 +
-                    this.windOffset
-                ) * 0.05 +
-
-                wind;
-
-            if(i > 0){
-
-                const prev =
-                    this.segments[i-1];
-
-                seg.x =
-                    prev.endX;
-
-                seg.y =
-                    prev.endY;
-            }
-
-            seg.endX =
-                seg.x +
-                Math.cos(
-                    seg.renderAngle
-                ) *
-                seg.length;
-
-            seg.endY =
-                seg.y +
-                Math.sin(
-                    seg.renderAngle
-                ) *
-                seg.length;
-        });
     }
 
     draw(){
 
-    this.segments.forEach(
-        (seg,i)=>{
-
-        const brightness =
-            25 + i * 1.5;
-
         ctx.strokeStyle =
-            `hsl(
-                110,
-                40%,
-                ${brightness}%
-            )`;
+            "#3d7a2c";
 
-        ctx.lineWidth =
-            seg.thickness;
+        ctx.lineWidth = 4;
 
         ctx.beginPath();
 
         ctx.moveTo(
-            seg.x,
-            seg.y
+            this.x,
+            this.y
         );
 
-        ctx.quadraticCurveTo(
-
-            (seg.x + seg.endX)/2 +
-            Math.sin(i) * 3,
-
-            (seg.y + seg.endY)/2,
-
-            seg.endX,
-            seg.endY
-
+        ctx.lineTo(
+            this.x,
+            this.y - this.height
         );
 
         ctx.stroke();
-
-        // leaves
-
-        if(i > 2){
-
-            drawLeaf(
-
-                seg.endX,
-                seg.endY,
-
-                seg.renderAngle,
-
-                8 + Math.sin(i)*2
-
-            );
-        }
-    });
+    }
 }
-}
+animate();
+canvas.addEventListener("click", e => {
+
+    if(
+        e.clientY >
+        canvas.height - 120
+    ){
+
+        seeds.push(
+            new Seed(
+                e.clientX,
+                e.clientY
+            )
+        );
+    }
+});
 
 window.addEventListener("load", () => {
   const loading = document.getElementById("loadingScreen");
